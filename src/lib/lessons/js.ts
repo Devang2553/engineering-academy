@@ -3,22 +3,22 @@ import type { Lesson } from "./model";
 export const JS_LESSONS: Record<string, Lesson> = {
   "JS1-U01": {
     unitId: "JS1-U01",
-    intro: "Welcome to your very first lesson. Every line of JavaScript you will ever write rests on this idea: the engine keeps a careful record of where it is. Read slowly, and let the picture form.",
+    intro: "Welcome, and let us begin at the very beginning. Before JavaScript runs a single line, it builds a small picture of your code in its head. Learn how that picture is made, and the rest of the language will start to make sense.",
     sections: [
       {
-        heading: "The execution context",
+        heading: "The execution context: a box built around your code",
         body: [
-          "Whenever JavaScript runs code, it wraps that code in an execution context. The global execution context is created first, and it is the one that exists for the whole program.",
-          "Each execution context works in two phases. In the memory creation phase, the engine scans the code and sets aside space for variables and functions. Variables declared with var start as undefined, and function declarations are stored in full. In the code execution phase, the engine runs the code line by line and fills in the values.",
-          "The global context also has a global object, which in a browser is window, and a this keyword that points to it in a classic script. The variables live in a variable environment, which is simply the record of names and values for that context.",
+          "Think of an execution context as a box the engine builds around code before that code runs. Everything in JavaScript happens inside one of these boxes, and the very first box is the global execution context.",
+          "Each box is built in two steps. First comes the creation phase: the engine walks through the code, makes room for every variable and function, and stores each function in full. Then comes the execution phase, where the code runs line by line and the values fill in.",
+          "In the browser, the global box also creates the global object, window, and points this at it. Every box keeps its names and values in a memory component, which is how the engine finds them again later.",
         ],
       },
       {
-        heading: "The call stack",
+        heading: "The call stack: a pile of plates",
         body: [
-          "The engine keeps track of its contexts in a call stack. Think of a stack of plates: you can only add or remove the top plate. This is a last-in, first-out structure.",
-          "The global context sits at the bottom. When a function is called, a new execution context is pushed on top. When that function returns, its context is popped off, and execution goes back to the one beneath it.",
-          "If functions keep calling each other without ever returning, the stack grows until it runs out of room. The browser then throws a RangeError with the message Maximum call stack size exceeded. That is a stack overflow.",
+          "Each time a function is called, the engine builds a new box for it and places that box on the call stack. The stack works like a pile of plates. You can only reach the top plate, so the box placed last is the first one taken off.",
+          "When a function finishes, its box is removed and the engine goes back to the box beneath it. The global box stays at the bottom until the program ends.",
+          "If calls keep piling up and never finish, the pile overflows, and the browser throws RangeError: Maximum call stack size exceeded. A recursive function with no stopping point is the usual cause.",
         ],
       },
     ],
@@ -73,21 +73,21 @@ export const JS_LESSONS: Record<string, Lesson> = {
 
   "JS1-U02": {
     unitId: "JS1-U02",
-    intro: "Here is a small mystery that trips up almost every developer at first: why can a variable be used before the line where it is declared? By the end of this lesson, the mystery will feel quite ordinary.",
+    intro: "Here is a puzzle that confuses almost everyone at first: why can a variable seem to exist before the line where it is written? The answer lives in the creation phase, and once you see it, hoisting stops feeling like magic.",
     sections: [
       {
-        heading: "Hoisting",
+        heading: "Hoisting: what the creation phase already knows",
         body: [
-          "Hoisting is not the code moving up the page. It is the result of the memory creation phase. Before any line runs, the engine has already noticed every var and every function declaration in the context.",
-          "A var declaration is given the value undefined during that phase. So reading it before its line gives undefined, not an error. A function declaration is stored in full, so you can call it above the place where it is written.",
-          "A function expression stored in a var behaves differently. The var exists early, but it holds undefined until the assignment line runs. Calling it too early produces a TypeError, because undefined is not a function.",
+          "Hoisting does not mean the code physically jumps to the top. It is a consequence of the creation phase. The engine reads the whole program first, so it already knows about every var and function declaration before a single line runs.",
+          "During that reading, a var is given the value undefined. So reading it early gives you undefined rather than an error. A function declaration is stored in full, so you can call it above the line where it is written.",
+          "A function expression stored in a var only gets the var early. The var holds undefined until the assignment line runs, so calling it too soon throws a TypeError, because undefined is not a function.",
         ],
       },
       {
-        heading: "Undefined and not defined",
+        heading: "Undefined and not defined: two different situations",
         body: [
-          "undefined is a value. It means a variable has been declared but has not been given anything yet. It is what the engine places in a var during memory creation.",
-          "not defined is an error. It means the name was never declared anywhere in the scope chain. Reading it throws a ReferenceError with the message x is not defined.",
+          "undefined is a value. It tells you a name exists in memory but has nothing in it yet. It is exactly what the creation phase places inside a var.",
+          "not defined is an error. It means the name is not in memory at all, anywhere the engine can look. Reading it throws a ReferenceError with the message x is not defined.",
           "There is one helpful exception. typeof on a name that was never declared returns the string undefined and does not throw. That makes it a safe check when you are unsure whether a global exists.",
         ],
       },
