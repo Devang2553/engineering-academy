@@ -22,6 +22,7 @@ export type Lesson = {
   sections: LessonSection[];
   takeaways: string[];
   checks: Record<string, Question[]>; // keyed by topic id, e.g. "JS1-T001"
+  diagram?: { caption: string; svg: string }; // one picture shown at the top of the lesson
 };
 
 export const PASS_MARK = 70;

@@ -24,6 +24,16 @@ export function LessonBlock({ lesson, topicId, topicStatus, lessonRead, last }: 
         </div>
         <p className="mt-2 font-serif text-base leading-relaxed italic text-muted">{lesson.intro}</p>
 
+        {lesson.diagram && (
+          <figure className="mt-5 rounded-xl border border-line p-4">
+            <div
+              className="mx-auto max-w-[520px] [&>svg]:h-auto [&>svg]:w-full"
+              dangerouslySetInnerHTML={{ __html: lesson.diagram.svg }}
+            />
+            <figcaption className="mt-3 text-sm leading-relaxed text-muted">{lesson.diagram.caption}</figcaption>
+          </figure>
+        )}
+
         {lesson.sections.map((sec) => (
           <div key={sec.heading} className="mt-5">
             <h3 className="font-serif text-xl font-semibold">{sec.heading}</h3>
