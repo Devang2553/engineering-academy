@@ -1,4 +1,4 @@
-import { EXPECTATIONS, OPPORTUNITIES, RESUME, SKILL_GAPS, type Opportunity } from "@/lib/careers/data";
+import { EXPECTATIONS, OPPORTUNITIES, RESUME, SKILL_GAPS, skillPostingCount, type Opportunity } from "@/lib/careers/data";
 
 export const metadata = { title: "Career · Engineering Academy" };
 
@@ -8,6 +8,9 @@ function verdict(o: Opportunity): { level: Verdict; reasons: string[] } {
   const reasons: string[] = [];
   let failed = false;
   let unknown = false;
+
+  if (o.minYears === null) unknown = true;
+  else if (o.minYears > EXPECTATIONS.maxRequiredYears) { failed = true; reasons.push(`Asks for ${o.minYears}+ years, above ${EXPECTATIONS.maxRequiredYears}`); }
 
   if (o.headcount === null) unknown = true;
   else if (o.headcount < EXPECTATIONS.minHeadcount) { failed = true; reasons.push(`Headcount ${o.headcountLabel}, under ${EXPECTATIONS.minHeadcount}`); }
@@ -79,7 +82,7 @@ export default function Page() {
                   {g.inCurriculum ? "In curriculum" : "Not in curriculum"}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-muted">{g.postings} of {OPPORTUNITIES.length} listings · {g.why}</p>
+              <p className="mt-1 text-sm text-muted">{skillPostingCount(g.match)} of {OPPORTUNITIES.length} listings · {g.why}</p>
             </li>
           ))}
         </ul>
